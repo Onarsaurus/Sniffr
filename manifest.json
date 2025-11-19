@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Sniffr",
+  "version": "1.0",
+  "description": "An accessibility-focused AI page finder that helps you locate what you need on any website.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "images/Extension-03.png",
+      "48": "images/Extension-03.png",
+      "128": "images/Extension-03.png"
+    }
+  },
+  "permissions": ["activeTab", "scripting"]
+}

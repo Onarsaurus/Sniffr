@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sniffr</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <img src="images/Extension-03.png" alt="Sniffr Icon" class="icon logo">
+      <h1 class="title">SNIFFR</h1>
+      <img src="images/Extension-03.png" alt="Settings" class="icon settings">
+    </header>
+
+    <!-- Chat Window -->
+    <div class="chat-container">
+      <div class="message user">
+        <div class="avatar user-avatar"></div>
+        <div class="bubble user-bubble">Where can I find the publications on this site?</div>
+      </div>
+
+      <div class="message sniffr">
+        <div class="avatar sniffr-avatar"></div>
+        <div class="bubble sniffr-bubble">I’ve found it <a href="#">HERE</a>.</div>
+      </div>
+
+      <div class="message user">
+        <div class="avatar user-avatar"></div>
+        <div class="bubble user-bubble">Thanks dog!</div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-bar">
+      <img src="images/Extension-03.png" alt="Chair" class="icon chair">
+      <input type="text" placeholder="Search" id="searchInput" />
+      <button id="sendBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke="currentColor" class="search-icon">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 14.65z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <script src="scripts/popup.js"></script>
+</body>
+</html>

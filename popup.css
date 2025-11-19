@@ -1,0 +1,174 @@
+/* --- Overall Container --- */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: transparent;
+}
+
+.popup-container {
+  width: 500px;
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  overflow: hidden;
+}
+
+/* --- Header --- */
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e1e1e;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.title {
+  color: #ffa424;
+  font-weight: 800;
+  letter-spacing: 1px;
+  font-size: 1.4em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+}
+
+.logo {
+  border-radius: 50%;
+}
+
+.settings {
+  filter: brightness(0.9);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.settings:hover {
+  filter: brightness(1.2);
+}
+
+/* --- Chat Container --- */
+.chat-container {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px;
+  overflow-y: auto;
+}
+
+/* Message Wrappers */
+.message {
+  display: flex;
+  align-items: flex-end;
+  margin: 8px 0;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.sniffr {
+  justify-content: flex-start;
+}
+
+/* Avatars */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.sniffr-avatar {
+  background-image: url("../icons/sniffr-dog.png");
+  margin-right: 8px;
+}
+
+.user-avatar {
+  background-color: #555;
+  margin-left: 8px;
+}
+
+/* Chat Bubbles */
+.bubble {
+  padding: 8px 12px;
+  border-radius: 16px;
+  max-width: 70%;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.user-bubble {
+  background: #e0e0e0;
+  color: #000;
+}
+
+.sniffr-bubble {
+  background: #3b2b1c;
+  color: #fff;
+}
+
+.sniffr-bubble a {
+  color: #ffa424;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.sniffr-bubble a:hover {
+  color: #ffb84c;
+  text-decoration: underline;
+}
+
+/* --- Input Bar --- */
+.input-bar {
+  display: flex;
+  align-items: center;
+  background-color: #1e1e1e;
+  padding: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.input-bar input {
+  flex: 1;
+  background-color: #2a2a2a;
+  border: none;
+  color: #fff;
+  border-radius: 20px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.input-bar input::placeholder {
+  color: #999;
+}
+
+.input-bar .chair {
+  margin-right: 8px;
+  width: 28px;
+  height: 28px;
+}
+
+#sendBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ffa424;
+  margin-left: 8px;
+}
+
+.search-icon {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.2px;
+}
