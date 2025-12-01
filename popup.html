@@ -8,44 +8,39 @@
 </head>
 
 <body>
-  <div class="popup-container">
+  <div class="popup-container" role="dialog" aria-label="Sniffr assistant">
     <!-- Header -->
     <header class="popup-header">
-      <img src="images/Extension-03.png" alt="Sniffr Icon" class="icon logo">
-      <h1 class="title">SNIFFR</h1>
-      <img src="images/Extension-03.png" alt="Settings" class="icon settings">
+      <img src="images/logo.png" alt="Sniffr Icon" class="icon logo" />
+      <h1 class="title" id="sniffr-title">SNIFFR</h1>
+      <button id="settingsBtn" class="settings icon" aria-label="Settings">
+        <img src="images/gear1.png" alt="settings icon (gear)" class="settings icon"/>
+      </button>
     </header>
 
-    <!-- Chat Window -->
-    <div class="chat-container">
-      <div class="message user">
-        <div class="avatar user-avatar"></div>
-        <div class="bubble user-bubble">Where can I find the publications on this site?</div>
-      </div>
-
-      <div class="message sniffr">
-        <div class="avatar sniffr-avatar"></div>
-        <div class="bubble sniffr-bubble">I’ve found it <a href="#">HERE</a>.</div>
-      </div>
-
-      <div class="message user">
-        <div class="avatar user-avatar"></div>
-        <div class="bubble user-bubble">Thanks dog!</div>
-      </div>
-    </div>
+    <!-- Chat / result Window -->
+    <main class="chat-container" id="chatContainer" role="region" aria-live="polite">
+      <!-- Messages will be injected here by JS -->
+    </main>
 
     <!-- Input Area -->
-    <div class="input-bar">
-      <img src="images/Extension-03.png" alt="Chair" class="icon chair">
-      <input type="text" placeholder="Search" id="searchInput" />
-      <button id="sendBtn">
+    <form class="input-bar" id="inputBar" action="#" onsubmit="return false;">
+      <img src="images/logo.png" alt="" class="icon chair" aria-hidden="true" />
+      <input
+        type="text"
+        placeholder="Search (e.g. portal, login, contact...)"
+        id="searchInput"
+        aria-label="Search page"
+        autocomplete="off"
+      />
+      <button id="sendBtn" aria-label="Send query" title="Search">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor" class="search-icon">
+             stroke="currentColor" class="search-icon" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 14.65z" />
         </svg>
       </button>
-    </div>
+    </form>
   </div>
 
   <script src="scripts/popup.js"></script>

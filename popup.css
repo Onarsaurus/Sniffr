@@ -12,10 +12,17 @@ body {
   flex-direction: column;
   justify-content: space-between;
   background: rgba(0, 0, 0, 0.8);
-  border-radius: 16px;
+  border-radius: 0;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   overflow: hidden;
+}
+
+/* Firefox detects "-moz-" prefixed selector */
+@-moz-document url-prefix() {
+  .popup-container {
+    border-radius: 16px; /* Firefox supports true rounded corners */
+  }
 }
 
 /* --- Header --- */
@@ -43,7 +50,7 @@ body {
 }
 
 .logo {
-  border-radius: 50%;
+  /* border-radius: 50%; */
 }
 
 .settings {
@@ -63,6 +70,7 @@ body {
   flex-direction: column;
   padding: 10px 15px;
   overflow-y: auto;
+  gap: 4px; /* add this line for a bit of space between messages */
 }
 
 /* Message Wrappers */
@@ -90,7 +98,7 @@ body {
 }
 
 .sniffr-avatar {
-  background-image: url("../icons/sniffr-dog.png");
+  background-image: url("images/Extenstion-03.png");
   margin-right: 8px;
 }
 
@@ -172,3 +180,143 @@ body {
   height: 22px;
   stroke-width: 2.2px;
 }
+
+/* ------------------------
+   Sniffr results & actions
+   ------------------------ */
+
+.sniffr-results-list {
+  list-style: none;
+  margin: 8px 0 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Each result row */
+.sniffr-result-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px 10px;
+  border-radius: 12px;
+  transition: background-color 120ms ease, transform 120ms ease;
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Hover for result item */
+.sniffr-result-item:hover {
+  background: rgba(255,255,255,0.04);
+  transform: translateY(-1px);
+}
+
+/* Label button (click to re-highlight) */
+.sniffr-result-label {
+  font-size: 0.92rem;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+  line-height: 1.2;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex: 1 1 auto;
+}
+
+/* label hover/focus */
+.sniffr-result-label:hover,
+.sniffr-result-label:focus {
+  text-decoration: underline;
+  outline: none;
+}
+
+/* make labels keyboard friendly */
+.sniffr-result-label:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255,164,36,0.15);
+  border-radius: 6px;
+}
+
+/* Score badge */
+.sniffr-score-badge {
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 6px;
+  border-radius: 8px;
+  color: #1e1e1e;
+  background: linear-gradient(180deg, #ffd48a, #ffa424);
+  box-shadow: 0 1px 0 rgba(0,0,0,0.2) inset;
+}
+
+/* Open button */
+.sniffr-open-btn {
+  background: transparent;
+  border: 1px solid rgba(255,164,36,0.18);
+  color: #ffa424;
+  padding: 6px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 120ms ease, color 120ms ease;
+  margin-left: 8px;
+}
+
+/* Open hover/focus */
+.sniffr-open-btn:hover {
+  background: rgba(255,164,36,0.06);
+  transform: translateY(-1px);
+}
+
+.sniffr-open-btn:active {
+  transform: translateY(0);
+}
+
+.sniffr-open-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255,164,36,0.14);
+}
+
+/* Short explanatory intro text inside sniffr bubble */
+.sniffr-bubble > div,
+.sniffr-bubble > p {
+  margin: 0;
+}
+
+/* Make long labels wrap gracefully, but keep a max-width to avoid overflowing the popup */
+.sniffr-result-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* If the popup width is constrained (small screens), allow wrapping */
+@media (max-width: 280px) {
+  .popup-container {
+    width: 360px;
+    height: 520px; /* taller for small screens */
+  }
+  .sniffr-result-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .sniffr-open-btn {
+    margin-left: 0;
+    align-self: flex-end;
+  }
+}
+
+/* Subtle color tweaks to match your established palette */
+.sniffr-result-item .sniffr-result-label { color: #fff; }
+.sniffr-result-item .sniffr-score-badge { color: #1e1e1e; }
+
+/* Small accessibility helper: ensure high contrast text in user bubble */
+.user-bubble { color: #000 !important; }
+
+/* Tiny spacing for the intro text and list inside the bubble */
+.sniffr-bubble ol.sniffr-results-list { margin-top: 8px; }
