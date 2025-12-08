@@ -1,5 +1,7 @@
 // scripts/popup.js
 // Modern, robust popup logic that handles content.js -> response.results structure.
+// Updated to call server-side ranking (VERCEL) via background.js (server-rank),
+// falling back to local scoring if needed.
 
 (() => {
   // ---- Utility: promisify chrome APIs ----
@@ -23,6 +25,22 @@
         chrome.tabs.sendMessage(tabId, message, (resp) => {
           if (chrome.runtime.lastError) {
             // Common case: some pages block extensions (chrome://, webstore, etc.)
+            return reject(chrome.runtime.lastError);
+          }
+          resolve(resp);
+        });
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  // Promisified background message
+  function sendMessageToBackground(message) {
+    return new Promise((resolve, reject) => {
+      try {
+        chrome.runtime.sendMessage(message, (resp) => {
+          if (chrome.runtime.lastError) {
             return reject(chrome.runtime.lastError);
           }
           resolve(resp);
@@ -200,36 +218,109 @@
     // Add user bubble
     addMessage(text, "user");
 
-    // Query the active tab and the content script (wrap in try/catch)
+    // New flow: try server ranking (Vercel via background.js) using content candidates
     try {
       const tab = await queryActiveTab();
-      // Ask content script to search
-      const response = await sendMessageToTab(tab.id, { type: "sniffr-search", query: text });
 
-      // If content script returns results in the older single-object format, normalize it
-      // Normalize to: { found: boolean, results: [{score, text, href, region, tagName}, ...] }
-      let normalized = { found: false, results: [] };
-      if (!response) {
-        throw new Error("No response from content script");
-      } else if (response.found && Array.isArray(response.results)) {
-        normalized = response;
-      } else if (response.found && response.text) {
-        // legacy fallback: single result object
-        normalized = {
-          found: true,
-          results: [{
-            score: response.score || 20,
-            text: response.text || response.href || "",
-            href: response.href || null,
-            region: response.region || null,
-            tagName: response.tagName || null
-          }]
-        };
-      } else {
-        normalized = { found: !!response.found, results: response.results || [] };
+      // 1) request raw candidates from the content script
+      let candidatesResp;
+      try {
+        candidatesResp = await sendMessageToTab(tab.id, { type: "sniffr-candidates" });
+      } catch (err) {
+        // content script not reachable or blocked; fallback to direct local scoring
+        console.warn("Could not get candidates:", err);
+        const fallback = await sendMessageToTab(tab.id, { type: "sniffr-search", query: text });
+        // normalize and render fallback
+        let normalized = { found: false, results: [] };
+        if (fallback && fallback.found && Array.isArray(fallback.results)) normalized = fallback;
+        else if (fallback && fallback.found && fallback.text) {
+          normalized = { found: true, results: [{ score: fallback.score || 20, text: fallback.text || "", href: fallback.href || null }] };
+        }
+        renderResults(text, tab.url, normalized);
+        return;
       }
 
-      renderResults(text, tab.url, normalized);
+      const candidates = (candidatesResp && Array.isArray(candidatesResp.candidates)) ? candidatesResp.candidates.slice(0, 80) : [];
+
+      // If no candidates returned, fallback to local scoring search
+      if (!candidates || candidates.length === 0) {
+        const fallback = await sendMessageToTab(tab.id, { type: "sniffr-search", query: text });
+        let normalized = { found: false, results: [] };
+        if (fallback && fallback.found && Array.isArray(fallback.results)) normalized = fallback;
+        else if (fallback && fallback.found && fallback.text) {
+          normalized = { found: true, results: [{ score: fallback.score || 20, text: fallback.text || "", href: fallback.href || null }] };
+        }
+        renderResults(text, tab.url, normalized);
+        return;
+      }
+
+      // 2) ask background to call server (vercel) for ranking: message type "server-rank"
+      let serverResp;
+      try {
+        serverResp = await sendMessageToBackground({ type: "server-rank", query: text, candidates });
+      } catch (err) {
+        console.warn("server-rank failed:", err);
+        serverResp = null;
+      }
+
+      // If server failed, do local scoring fallback
+      if (!serverResp || !serverResp.ok || !serverResp.server) {
+        console.warn("Server response invalid, falling back to local scoring");
+        const fallback = await sendMessageToTab(tab.id, { type: "sniffr-search", query: text });
+        let normalized = { found: false, results: [] };
+        if (fallback && fallback.found && Array.isArray(fallback.results)) normalized = fallback;
+        else if (fallback && fallback.found && fallback.text) {
+          normalized = { found: true, results: [{ score: fallback.score || 20, text: fallback.text || "", href: fallback.href || null }] };
+        }
+        renderResults(text, tab.url, normalized);
+        return;
+      }
+
+      // serverResp.server should contain the Vercel response (ok, raw, parsed)
+      const serverData = serverResp.server;
+      const parsed = serverData && serverData.parsed ? serverData.parsed : null;
+      const raw = serverData && serverData.raw ? serverData.raw : "";
+
+      if (parsed && typeof parsed.index === "number" && parsed.index >= 0 && parsed.index < candidates.length) {
+        const best = candidates[parsed.index];
+
+        // Re-run local highlight by sending the best candidate text/href to content script
+        try {
+          await sendMessageToTab(tab.id, { type: "sniffr-search", query: best.text || best.href || text });
+        } catch (err) {
+          // highlight could fail silently; still show result
+          console.warn("Highlighting best candidate failed:", err);
+        }
+
+        // Show AI-picked result in popup
+        const fragment = document.createDocumentFragment();
+        const line = document.createElement("div");
+        line.textContent = `Sniffr (AI) picked: "${best.text || best.href}". ${parsed.reason || ""}`;
+        fragment.appendChild(line);
+
+        if (best.href) {
+          const link = document.createElement("a");
+          // If the href is relative, let the user open it - it will resolve in a new tab
+          link.href = best.href;
+          link.textContent = "Open";
+          link.target = "_blank";
+          link.style.marginLeft = "8px";
+          fragment.appendChild(link);
+        }
+
+        addMessage(fragment, "sniffr");
+      } else {
+        // no confident index from AI - show message + assistant raw output for debugging/readability
+        addMessage(`Sniffr (AI) couldn't find a confident match. ${raw || parsed?.reason || ""}`, "sniffr");
+        // optionally show local results as fallback suggestions
+        const fallback = await sendMessageToTab(tab.id, { type: "sniffr-search", query: text });
+        let normalized = { found: false, results: [] };
+        if (fallback && fallback.found && Array.isArray(fallback.results)) normalized = fallback;
+        else if (fallback && fallback.found && fallback.text) {
+          normalized = { found: true, results: [{ score: fallback.score || 20, text: fallback.text || "", href: fallback.href || null }] };
+        }
+        renderResults(text, tab.url, normalized);
+      }
     } catch (err) {
       // Show friendly error to user (don't expose raw error to UI)
       console.error("Sniffr error:", err);
