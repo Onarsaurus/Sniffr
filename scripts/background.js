@@ -2,13 +2,13 @@
 // This file exposes chrome.runtime.onMessage to handle "server-rank" requests from popup.
 // It forwards the request to your Vercel endpoint.
 
-const VERCEL_URL = "https://<YOUR_VERCEL_PROJECT>.vercel.app/api/sniffr-proxy"; // <-- REPLACE with your deployment
+const VERCEL_URL = "https://sniffr-gamma.vercel.app/api/sniffr-proxy"; // <-- REPLACE with your deployment
 
 async function proxyToServer(body) {
   const resp = await fetch(VERCEL_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
+    body: JSON.stringify(body),
   });
   // note: network errors will throw
   return resp.json();
@@ -19,7 +19,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "server-rank") {
     (async () => {
       try {
-        const resp = await proxyToServer({ query: message.query, candidates: message.candidates });
+        const resp = await proxyToServer({
+          query: message.query,
+          candidates: message.candidates,
+        });
         sendResponse({ ok: true, server: resp });
       } catch (err) {
         console.error("server-rank error:", err);
