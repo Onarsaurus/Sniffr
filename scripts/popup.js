@@ -66,10 +66,10 @@
     message.classList.add("message", sender);
 
     const avatar = document.createElement("div");
-    avatar.classList.add("avatar", sender === "user" ? "user-avatar" : "sniffr-avatar");
+    avatar.classList.add("avatar", sender === "user" ? "user-avatar" : "uxray-avatar");
 
     const bubble = document.createElement("div");
-    bubble.classList.add("bubble", sender === "user" ? "user-bubble" : "sniffr-bubble");
+    bubble.classList.add("bubble", sender === "user" ? "user-bubble" : "uxray-bubble");
 
     if (contentNode instanceof Node) {
       bubble.appendChild(contentNode);

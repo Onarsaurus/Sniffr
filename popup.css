@@ -37,6 +37,8 @@ body {
   font-size: 1.3rem;
   letter-spacing: 1px;
   margin: 0;
+  width: 140px;
+  height: 30px;
 }
 
 /* Icons */
@@ -86,15 +88,16 @@ body {
   border-radius: 50%;
   background-size: cover;
   background-position: center;
+  cursor: pointer;
 }
 
 .uxray-avatar {
-  background-image: url("images/icon1.png");
+  background-image: url("images/icon2.png");
   margin-right: 8px;
 }
 
 .user-avatar {
-  background: #444;
+  background-image: url("images/icon1.png");
   margin-left: 8px;
 }
 
@@ -114,7 +117,7 @@ body {
 
 /* User Bubble */
 .user-bubble {
-  background: #2f2c38;
+  background: var(--main-bubble-purple);
   color: white;
 }
 
@@ -147,6 +150,16 @@ body {
   width: 20px;
   margin-right: 8px;
   opacity: 0.7;
+}
+
+#searchInput::placeholder {
+  color: var(--main-text-color);
+}
+
+#settingsBtn {
+  background: none;
+  border: none;
+  padding: 0;
 }
 
 /* Send Button */
