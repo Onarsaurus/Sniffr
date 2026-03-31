@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sniffr</title>
+  <title>UXRay</title>
   <link rel="stylesheet" href="popup.css" />
 </head>
 
 <body>
-  <div class="popup-container" role="dialog" aria-label="Sniffr assistant">
+  <div class="popup-container" role="dialog" aria-label="UXRay assistant">
     <!-- Header -->
     <header class="popup-header">
-      <img src="images/logo.png" alt="Sniffr Icon" class="icon logo" />
-      <h1 class="title" id="sniffr-title">SNIFFR</h1>
-      <button id="settingsBtn" class="settings icon" aria-label="Settings">
-        <img src="images/gear1.png" alt="settings icon (gear)" class="settings icon"/>
+      <img src="images/icon1.png" alt="UXRay Icon" class="icon logo" />
+      <h1 class="title" id="uxray-title">UXRAY</h1>
+      <button id="settingsBtn" class="icon" aria-label="Settings">
+        <img src="images/gear.png" alt="settings icon (gear)" class="icon" />
       </button>
     </header>
 
@@ -25,24 +26,16 @@
 
     <!-- Input Area -->
     <form class="input-bar" id="inputBar" action="#" onsubmit="return false;">
-      <img src="images/logo.png" alt="" class="icon chair" aria-hidden="true" />
-      <input
-        type="text"
-        placeholder="Search (e.g. portal, login, contact...)"
-        id="searchInput"
-        aria-label="Search page"
-        autocomplete="off"
-      />
+      <img src="images/icon1.png" alt="" class="icon chair" aria-hidden="true" />
+      <input type="text" placeholder="Search (e.g. portal, login, contact...)" id="searchInput" aria-label="Search page"
+        autocomplete="off" />
       <button id="sendBtn" aria-label="Send query" title="Search">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke="currentColor" class="search-icon" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 14.65z" />
-        </svg>
+        <img src="images/search.png" alt="" class="icon" aria-hidden="true" />
       </button>
     </form>
   </div>
 
   <script src="scripts/popup.js"></script>
 </body>
+
 </html>

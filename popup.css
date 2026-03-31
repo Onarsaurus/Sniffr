@@ -1,28 +1,25 @@
-/* --- Overall Container --- */
+:root {
+  --main-dark-purple: #26252f;
+  --main-bg-purple: #3c3747;
+  --main-bubble-purple: #504b5a;
+  --main-text-color: #63587a;
+}
+
+/* --- Base --- */
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
   background: transparent;
 }
 
+/* --- Container --- */
 .popup-container {
   width: 500px;
   height: 460px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
+  background: var(--main-bg-purple);
   overflow: hidden;
-}
-
-/* Firefox detects "-moz-" prefixed selector */
-@-moz-document url-prefix() {
-  .popup-container {
-    border-radius: 16px; /* Firefox supports true rounded corners */
-  }
 }
 
 /* --- Header --- */
@@ -30,293 +27,138 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #1e1e1e;
-  padding: 10px 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 12px 16px;
+  background: var(--main-dark-purple);
 }
 
 .title {
-  color: #ffa424;
+  color: var(--main-text-color);
   font-weight: 800;
+  font-size: 1.3rem;
   letter-spacing: 1px;
-  font-size: 1.4em;
-  text-transform: uppercase;
   margin: 0;
 }
 
+/* Icons */
 .icon {
-  width: 32px;
-  height: 32px;
-}
-
-.logo {
-  /* border-radius: 50%; */
+  width: 28px;
+  height: 28px;
 }
 
 .settings {
-  filter: brightness(0.9);
   cursor: pointer;
+  opacity: 0.8;
   transition: 0.2s;
 }
 
 .settings:hover {
-  filter: brightness(1.2);
+  opacity: 1;
 }
 
-/* --- Chat Container --- */
+/* --- Chat --- */
 .chat-container {
-  flex-grow: 1;
+  flex: 1;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  padding: 10px 15px;
+  gap: 10px;
   overflow-y: auto;
-  gap: 4px; /* add this line for a bit of space between messages */
 }
 
-/* Message Wrappers */
+/* Message Layout */
 .message {
   display: flex;
   align-items: flex-end;
-  margin: 8px 0;
 }
 
 .message.user {
   justify-content: flex-end;
 }
 
-.message.sniffr {
+.message.uxray {
   justify-content: flex-start;
 }
 
 /* Avatars */
 .avatar {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-size: cover;
   background-position: center;
 }
 
-.sniffr-avatar {
-  background-image: url("images/Extenstion-03.png");
+.uxray-avatar {
+  background-image: url("images/icon1.png");
   margin-right: 8px;
 }
 
 .user-avatar {
-  background-color: #555;
+  background: #444;
   margin-left: 8px;
 }
 
-/* Chat Bubbles */
+/* Bubbles */
 .bubble {
-  padding: 8px 12px;
-  border-radius: 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
   max-width: 70%;
   font-size: 0.9rem;
-  line-height: 1.3;
 }
 
+/* UXRay Bubble */
+.uxray-bubble {
+  background: var(--main-bubble-purple);
+  color: white;
+}
+
+/* User Bubble */
 .user-bubble {
-  background: #e0e0e0;
-  color: #000;
+  background: #2f2c38;
+  color: white;
 }
 
-.sniffr-bubble {
-  background: #3b2b1c;
-  color: #fff;
-}
-
-.sniffr-bubble a {
-  color: #ffa424;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.sniffr-bubble a:hover {
-  color: #ffb84c;
-  text-decoration: underline;
-}
-
-/* --- Input Bar --- */
+/* --- Input --- */
 .input-bar {
   display: flex;
   align-items: center;
-  background-color: #1e1e1e;
   padding: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--main-dark-purple);
 }
 
+/* Input */
 .input-bar input {
   flex: 1;
-  background-color: #2a2a2a;
   border: none;
-  color: #fff;
+  outline: none;
+  background: #2f2c38;
+  color: white;
   border-radius: 20px;
   padding: 8px 12px;
   font-size: 0.9rem;
-  outline: none;
 }
 
 .input-bar input::placeholder {
-  color: #999;
+  color: #aaa;
 }
 
-.input-bar .chair {
-  margin-right: 8px;
-  width: 28px;
-  height: 28px;
-}
-
-#sendBtn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: #ffa424;
-  margin-left: 8px;
-}
-
+/* Search Icon */
 .search-icon {
-  width: 22px;
-  height: 22px;
-  stroke-width: 2.2px;
+  width: 20px;
+  margin-right: 8px;
+  opacity: 0.7;
 }
 
-/* ------------------------
-   Sniffr results & actions
-   ------------------------ */
-
-.sniffr-results-list {
-  list-style: none;
-  margin: 8px 0 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* Each result row */
-.sniffr-result-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,0.03);
-  padding: 8px 10px;
-  border-radius: 12px;
-  transition: background-color 120ms ease, transform 120ms ease;
-  border: 1px solid rgba(255,255,255,0.03);
-}
-
-/* Hover for result item */
-.sniffr-result-item:hover {
-  background: rgba(255,255,255,0.04);
-  transform: translateY(-1px);
-}
-
-/* Label button (click to re-highlight) */
-.sniffr-result-label {
-  font-size: 0.92rem;
-  text-align: left;
-  padding: 0;
-  margin: 0;
-  line-height: 1.2;
-  color: #fff;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  flex: 1 1 auto;
-}
-
-/* label hover/focus */
-.sniffr-result-label:hover,
-.sniffr-result-label:focus {
-  text-decoration: underline;
-  outline: none;
-}
-
-/* make labels keyboard friendly */
-.sniffr-result-label:focus-visible {
-  box-shadow: 0 0 0 3px rgba(255,164,36,0.15);
-  border-radius: 6px;
-}
-
-/* Score badge */
-.sniffr-score-badge {
-  display: inline-block;
-  min-width: 40px;
-  text-align: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 4px 6px;
-  border-radius: 8px;
-  color: #1e1e1e;
-  background: linear-gradient(180deg, #ffd48a, #ffa424);
-  box-shadow: 0 1px 0 rgba(0,0,0,0.2) inset;
-}
-
-/* Open button */
-.sniffr-open-btn {
-  background: transparent;
-  border: 1px solid rgba(255,164,36,0.18);
-  color: #ffa424;
-  padding: 6px 8px;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 120ms ease, background-color 120ms ease, color 120ms ease;
+/* Send Button */
+#sendBtn {
   margin-left: 8px;
+  border: none;
+  background: none;
+  color: var(--main-text-color);
+  font-size: 16px;
+  cursor: pointer;
 }
 
-/* Open hover/focus */
-.sniffr-open-btn:hover {
-  background: rgba(255,164,36,0.06);
-  transform: translateY(-1px);
+#sendBtn:hover {
+  opacity: 0.8;
 }
-
-.sniffr-open-btn:active {
-  transform: translateY(0);
-}
-
-.sniffr-open-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255,164,36,0.14);
-}
-
-/* Short explanatory intro text inside sniffr bubble */
-.sniffr-bubble > div,
-.sniffr-bubble > p {
-  margin: 0;
-}
-
-/* Make long labels wrap gracefully, but keep a max-width to avoid overflowing the popup */
-.sniffr-result-label {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* If the popup width is constrained (small screens), allow wrapping */
-@media (max-width: 280px) {
-  .popup-container {
-    width: 360px;
-    height: 520px; /* taller for small screens */
-  }
-  .sniffr-result-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .sniffr-open-btn {
-    margin-left: 0;
-    align-self: flex-end;
-  }
-}
-
-/* Subtle color tweaks to match your established palette */
-.sniffr-result-item .sniffr-result-label { color: #fff; }
-.sniffr-result-item .sniffr-score-badge { color: #1e1e1e; }
-
-/* Small accessibility helper: ensure high contrast text in user bubble */
-.user-bubble { color: #000 !important; }
-
-/* Tiny spacing for the intro text and list inside the bubble */
-.sniffr-bubble ol.sniffr-results-list { margin-top: 8px; }
